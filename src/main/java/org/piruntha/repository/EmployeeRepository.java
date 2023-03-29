@@ -8,3 +8,4 @@ import java.util.Optional;
 public interface EmployeeRepository extends MongoRepository<Employee, String> {
     Optional<Employee> findEmployeeByFullName(String fullName);
 }
+
