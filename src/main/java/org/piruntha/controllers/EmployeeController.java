@@ -1,7 +1,7 @@
 package org.piruntha.controllers;
 
-import org.piruntha.dto.EmployeeRequest;
-import org.piruntha.dto.EmployeeResponse;
+import org.piruntha.dto.requests.EmployeeRequest;
+import org.piruntha.dto.responses.EmployeeResponse;
 import org.piruntha.model.Employee;
 import org.piruntha.services.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,29 +23,30 @@ public class EmployeeController {
     public String welcome(){
         return "Welcome to Spring security";
     }
+
     @PostMapping()
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+//    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public String addEmployee(@RequestBody EmployeeRequest employeeRequest){
         return employeeService.addEmployee(employeeRequest);
     }
 
     @GetMapping()
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    //@PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public List<Employee> getAllEmployees(EmployeeResponse employeeResponse){
         List<Employee> employees = employeeService.getEmployees(employeeResponse);
         return employees;
     }
 
-    @GetMapping("/{fullName}")
-    @PreAuthorize("hasAuthority('ROLE_USER')")
-    public Optional<Employee> getAnEmployee(@PathVariable String fullName){
-        return employeeService.getEmployeeByFullName(fullName);
-
+    @GetMapping("/{username}")
+   // @PreAuthorize("hasAuthority('ROLE_USER')")
+    public Optional<Employee> getAnEmployeeByUsername(@PathVariable String username){
+        return employeeService.getEmployeeByUsername(username);
     }
-    @PutMapping("/{fullName}")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public String editAnEmployee(@PathVariable String fullName, @RequestBody EmployeeRequest employeeRequest){
-        return employeeService.editAnEmployee(fullName, employeeRequest);
+
+    @PutMapping("/{username}")
+    //@PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    public String editAnEmployee(@PathVariable String username, @RequestBody EmployeeRequest employeeRequest){
+        return employeeService.editAnEmployee(username, employeeRequest);
     }
 
 
