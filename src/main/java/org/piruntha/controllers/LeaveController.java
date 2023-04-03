@@ -1,14 +1,12 @@
 package org.piruntha.controllers;
 
 import org.piruntha.dto.requests.LeaveRequest;
-import org.piruntha.dto.responses.LeaveResponse;
 import org.piruntha.model.Leave;
 import org.piruntha.services.LeaveService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/employee")
@@ -23,8 +21,8 @@ public class LeaveController {
 
     }
     @GetMapping("/leaves")
-    public List<Leave> getAllLeaveRequests(LeaveResponse leaveResponse){
-        return leaveService.getAllLeaves(leaveResponse);
+    public List<Leave> getAllLeaveRequests(){
+        return leaveService.getAllLeaves();
 
     }
     @GetMapping("/leave/{username}")
