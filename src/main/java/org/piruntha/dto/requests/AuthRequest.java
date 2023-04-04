@@ -1,4 +1,4 @@
-package org.piruntha.dto;
+package org.piruntha.dto.requests;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
