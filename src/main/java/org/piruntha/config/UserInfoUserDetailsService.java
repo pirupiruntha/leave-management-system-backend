@@ -1,7 +1,7 @@
 package org.piruntha.config;
 
-import org.piruntha.model.UserInfo;
-import org.piruntha.repository.UserInfoRepository;
+import org.piruntha.model.Employee;
+import org.piruntha.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -14,11 +14,11 @@ import java.util.Optional;
 public class UserInfoUserDetailsService implements UserDetailsService {
 
     @Autowired
-    private UserInfoRepository userInfoRepository;
+    private EmployeeRepository employeeRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<UserInfo> userInfo = userInfoRepository.findByName(username);
+        Optional<Employee> userInfo = employeeRepository.findEmployeeByUsername(username);
 
         return userInfo.map(UserInfoUserDetails::new)
                 .orElseThrow(()-> new UsernameNotFoundException("User not found"+ username));
