@@ -1,4 +1,4 @@
-package org.piruntha.services;
+package org.piruntha.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
