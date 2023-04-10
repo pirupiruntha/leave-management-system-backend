@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -26,6 +25,8 @@ public class Employee {
     private List<UserRoles> roles;
     private String gender;
     private String telephoneNo;
+    private double leaveAllowance;
+    private double leaveBalance;
     private String education;
     private String jobTitle;
     private Date startDate;

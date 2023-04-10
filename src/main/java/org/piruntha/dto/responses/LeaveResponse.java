@@ -1,7 +1,6 @@
 package org.piruntha.dto.responses;
 
 import lombok.Data;
-import org.springframework.data.annotation.Id;
 
 import java.util.Date;
 @Data

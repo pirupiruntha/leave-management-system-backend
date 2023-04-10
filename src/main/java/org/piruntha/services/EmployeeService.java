@@ -1,7 +1,9 @@
 package org.piruntha.services;
 
 import org.piruntha.dto.requests.EmployeeRequest;
+import org.piruntha.dto.responses.DeleteResponse;
 import org.piruntha.dto.responses.EmployeeResponse;
+import org.piruntha.exceptions.EmailExistsException;
 import org.piruntha.model.Employee;
 import org.piruntha.model.UserRoles;
 import org.piruntha.repository.EmployeeRepository;
@@ -24,7 +26,7 @@ public class EmployeeService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public String addEmployee(EmployeeRequest employeeRequest){
+    public Employee addEmployee(EmployeeRequest employeeRequest) throws EmailExistsException {
         Employee employee = new Employee();
         employee.setEmpId(employeeRequest.getEmpId());
         employee.setFullName(employeeRequest.getFullName());
@@ -33,13 +35,23 @@ public class EmployeeService {
         employee.setPassword(passwordEncoder.encode(employeeRequest.getPassword()));
         employee.setGender(employeeRequest.getGender());
         employee.setEmail(employeeRequest.getEmail());
+        if (employeeRepository.existsByEmail(employeeRequest.getEmail())) {
+            throw new EmailExistsException("Email already exists");
+        }
         employee.setEducation(employeeRequest.getEducation());
+        employee.setTelephoneNo(employeeRequest.getTelephoneNo());
         employee.setJobTitle(employeeRequest.getJobTitle());
+        if(employeeRequest.getLeaveAllowance()<=21){
+            employee.setLeaveAllowance(employeeRequest.getLeaveAllowance());
+        } else {
+            throw new RuntimeException("Leave allowance not allow more than 21");
+        }
+        employee.setLeaveBalance(employeeRequest.getLeaveAllowance());
         employee.setStartDate(employeeRequest.getStartDate());
         employee.setSalary(employeeRequest.getSalary());
         employee.setRoles(List.of(UserRoles.ROLE_USER));
         employeeRepository.save(employee);
-        return "successfully added employee";
+        return employee;
     }
 
     public List<Employee> getEmployees(EmployeeResponse employeeResponse){
@@ -52,16 +64,18 @@ public class EmployeeService {
         return employeeRepository.findEmployeeByUsername(username);
     }
 
-
-    public String editAnEmployee(String username, EmployeeRequest employeeRequest){
+    public Employee editAnEmployee(String username, EmployeeRequest employeeRequest){
         Employee existingEmployee = employeeRepository.findEmployeeByUsername(username).orElseThrow(()-> new RuntimeException("employee not found"));
+        String password = existingEmployee.getPassword();
         BeanUtils.copyProperties(employeeRequest, existingEmployee);
-        existingEmployee.setFullName(username);
-        employeeRepository.save(existingEmployee);
-        return username + " details updated";
+        existingEmployee.setUsername(username);
+        existingEmployee.setPassword(password);
+        existingEmployee.setRoles(List.of(UserRoles.ROLE_USER));
+
+        return employeeRepository.save(existingEmployee);
     }
-    public String deleteEmployee(String id){
+    public DeleteResponse deleteEmployee(String id){
         employeeRepository.deleteById(id);
-        return "Employee deleted";
+        return new DeleteResponse("delete success");
     }
 }

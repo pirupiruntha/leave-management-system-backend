@@ -1,27 +1,34 @@
 package org.piruntha.services;
 
 import org.piruntha.dto.requests.LeaveRequest;
+import org.piruntha.dto.requests.UpdateLeaveRequest;
+import org.piruntha.model.Employee;
 import org.piruntha.model.Leave;
+import org.piruntha.repository.EmployeeRepository;
 import org.piruntha.repository.LeaveRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Service
 public class LeaveService {
     @Autowired
     LeaveRepository leaveRepository;
-    public String addLeave( LeaveRequest leaveRequest, String username){
+    @Autowired
+    EmployeeRepository employeeRepository;
+
+    public Leave addLeave( LeaveRequest leaveRequest, String username){
         Leave leave = new Leave();
-        leave.setLeaveType(leaveRequest.getLeaveType());
         leave.setEmpUsername(username);
         leave.setStartDate(leaveRequest.getStartDate());
         leave.setEndDate(leaveRequest.getEndDate());
+        leave.setHalfDay(leaveRequest.isHalfDay());
         leave.setReason(leaveRequest.getReason());
         leave.setStatus("Pending");
-        leaveRepository.save(leave);
-        return "Successfully sent your leave request";
+
+        return leaveRepository.save(leave);
     }
 
     public List<Leave> getAllLeaves(){
@@ -35,5 +42,19 @@ public class LeaveService {
 
     }
 
-
+    public Leave updateLeave(UpdateLeaveRequest updateLeaveRequest) {
+        System.out.println("updateLeaveRequest.getLeaveId() = " + updateLeaveRequest.getLeaveId());
+        Leave leave = leaveRepository.findById(updateLeaveRequest.getLeaveId()).orElseThrow(()-> new RuntimeException("Leave not found"));
+        leave.setStatus(updateLeaveRequest.getStatus());
+        if(updateLeaveRequest.getStatus().equals("approved")){
+            Employee employee = employeeRepository.findEmployeeByUsername(leave.getEmpUsername()).orElseThrow(()-> new RuntimeException("user not found"));
+            if (leave.isHalfDay()){
+                employee.setLeaveBalance(employee.getLeaveBalance()- 0.5);
+            }else {
+                employee.setLeaveBalance(employee.getLeaveBalance()- ChronoUnit.DAYS.between(leave.getStartDate(), leave.getEndDate()));
+            }
+            employeeRepository.save(employee);
+        }
+        return leaveRepository.save(leave);
+    }
 }
