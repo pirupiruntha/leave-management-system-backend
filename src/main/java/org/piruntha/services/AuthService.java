@@ -31,7 +31,6 @@ public class AuthService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-
     public LoginResponse authenticateUser(AuthRequest authRequest) {
         //authenticate the user
         Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
