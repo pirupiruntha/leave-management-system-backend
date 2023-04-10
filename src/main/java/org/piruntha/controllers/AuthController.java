@@ -8,9 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class AuthController {
     @Autowired
     private AuthService authService;
@@ -21,9 +21,6 @@ public class AuthController {
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    //Call service method - UserInfoService
-    //Method to generate token and return token and list of roles
-    //LoginResponse loginResponse = userInfoService.authenticateUser(authRequest)
     @PostMapping("/login")
     public LoginResponse authenticateAndGetToken(@RequestBody AuthRequest authRequest){
         LoginResponse loginResponse = authService.authenticateUser(authRequest);
