@@ -22,7 +22,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
-
     @Autowired
     private JwtAuthFilter authFilter;
 
@@ -37,7 +36,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests()
                 .requestMatchers("/api/auth/login").permitAll()
                 .and()
-                .authorizeHttpRequests().requestMatchers("/employees/**", "/employee/leave/{username}", "/employee/leaves")
+                .authorizeHttpRequests().requestMatchers( "/employees/**", "/employee/leave/{username}", "/employee/leaves", "/employee/leaveBalance/{username}", "/employee/leave")
                 .authenticated()
                 .and()
                 .sessionManagement()
@@ -46,7 +45,6 @@ public class SecurityConfig {
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
-
     }
 
     @Bean
@@ -66,4 +64,5 @@ public class SecurityConfig {
         return configuration. getAuthenticationManager();
 
     }
+
 }
