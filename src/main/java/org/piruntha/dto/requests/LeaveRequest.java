@@ -2,13 +2,12 @@ package org.piruntha.dto.requests;
 
 import lombok.Data;
 
-import java.util.Date;
+import java.time.LocalDate;
 @Data
 public class LeaveRequest {
     private String empUsername;
-    private String leaveType;
-    private Date startDate;
-    private Date endDate;
+    private LocalDate startDate;
+    private LocalDate endDate;
     private boolean halfDay;
     private  String reason;
 }
