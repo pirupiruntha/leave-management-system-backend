@@ -49,7 +49,12 @@ public class LeaveService {
         if(updateLeaveRequest.getStatus().equals("approved")){
             Employee employee = employeeRepository.findEmployeeByUsername(leave.getEmpUsername()).orElseThrow(()-> new RuntimeException("user not found"));
             if (leave.isHalfDay()){
-                employee.setLeaveBalance(employee.getLeaveBalance()- 0.5);
+                if(ChronoUnit.DAYS.between(leave.getStartDate(), leave.getEndDate())==1){
+                    employee.setLeaveBalance(employee.getLeaveBalance()- 0.5);
+                }else{
+                    employee.setLeaveBalance(employee.getLeaveBalance()- ChronoUnit.DAYS.between(leave.getStartDate(), leave.getEndDate())+0.5);
+                }
+
             }else {
                 employee.setLeaveBalance(employee.getLeaveBalance()- ChronoUnit.DAYS.between(leave.getStartDate(), leave.getEndDate()));
             }
