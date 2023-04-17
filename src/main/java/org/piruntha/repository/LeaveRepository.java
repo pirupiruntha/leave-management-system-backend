@@ -8,4 +8,5 @@ import java.util.List;
 public interface LeaveRepository extends MongoRepository<Leave, String> {
     List<Leave> findAllByEmpUsername(String username);
 
+    void deleteAllByEmpUsername(String empUsername);
 }

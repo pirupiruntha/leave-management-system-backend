@@ -7,6 +7,7 @@ import org.piruntha.exceptions.EmailExistsException;
 import org.piruntha.model.Employee;
 import org.piruntha.model.UserRoles;
 import org.piruntha.repository.EmployeeRepository;
+import org.piruntha.repository.LeaveRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -25,6 +26,8 @@ public class EmployeeService {
     private MongoTemplate mongoTemplate;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    LeaveRepository leaveRepository;
 
     public Employee addEmployee(EmployeeRequest employeeRequest) throws EmailExistsException {
         Employee employee = new Employee();
@@ -74,8 +77,9 @@ public class EmployeeService {
 
         return employeeRepository.save(existingEmployee);
     }
-    public DeleteResponse deleteEmployee(String id){
-        employeeRepository.deleteById(id);
+    public DeleteResponse deleteEmployee(String username){
+        leaveRepository.deleteAllByEmpUsername(username);
+        employeeRepository.deleteById(username);
         return new DeleteResponse("delete success");
     }
 }
