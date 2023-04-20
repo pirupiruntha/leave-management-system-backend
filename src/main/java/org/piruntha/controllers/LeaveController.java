@@ -3,7 +3,6 @@ package org.piruntha.controllers;
 import jakarta.annotation.security.RolesAllowed;
 import org.piruntha.dto.requests.LeaveRequest;
 import org.piruntha.dto.requests.UpdateLeaveRequest;
-import org.piruntha.dto.responses.LeaveBalanceResponse;
 import org.piruntha.model.Leave;
 import org.piruntha.services.LeaveService;
 import org.springframework.beans.factory.annotation.Autowired;
