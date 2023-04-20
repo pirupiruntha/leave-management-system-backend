@@ -4,32 +4,35 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(collection = "employees")
+@Document(collection = "employee")
 public class Employee {
-
-    private int empId;
+    @Indexed(unique = true)
+    private String empId;
     private String fullName;
-    private Date dob;
+    private LocalDate dob;
+    @Indexed(unique = true)
     private String email;
     @Id
     private String username;
     private String password;
     private List<UserRoles> roles;
-    private String gender;
+    private Gender gender;
+    @Indexed(unique = true)
     private String telephoneNo;
     private double leaveAllowance;
     private double leaveBalance;
     private String education;
-    private String jobTitle;
-    private Date startDate;
+    private JobTitle jobTitle;
+    private LocalDate startDate;
     private double salary;
 
 }
