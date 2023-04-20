@@ -2,8 +2,10 @@ package org.piruntha.services;
 
 import org.piruntha.dto.requests.LeaveRequest;
 import org.piruntha.dto.requests.UpdateLeaveRequest;
+import org.piruntha.exceptions.CustomException;
 import org.piruntha.model.Employee;
 import org.piruntha.model.Leave;
+import org.piruntha.model.Status;
 import org.piruntha.repository.EmployeeRepository;
 import org.piruntha.repository.LeaveRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +28,7 @@ public class LeaveService {
         leave.setEndDate(leaveRequest.getEndDate());
         leave.setHalfDay(leaveRequest.isHalfDay());
         leave.setReason(leaveRequest.getReason());
-        leave.setStatus("Pending");
+        leave.setStatus(Status.PENDING);
 
         return leaveRepository.save(leave);
     }
@@ -43,11 +45,11 @@ public class LeaveService {
     }
 
     public Leave updateLeave(UpdateLeaveRequest updateLeaveRequest) {
-        System.out.println("updateLeaveRequest.getLeaveId() = " + updateLeaveRequest.getLeaveId());
-        Leave leave = leaveRepository.findById(updateLeaveRequest.getLeaveId()).orElseThrow(()-> new RuntimeException("Leave not found"));
+        Leave leave = leaveRepository.findById(updateLeaveRequest.getLeaveId()).orElseThrow(()-> new CustomException("Leave not found", 401));
+
         leave.setStatus(updateLeaveRequest.getStatus());
-        if(updateLeaveRequest.getStatus().equals("approved")){
-            Employee employee = employeeRepository.findEmployeeByUsername(leave.getEmpUsername()).orElseThrow(()-> new RuntimeException("user not found"));
+        if(updateLeaveRequest.getStatus().equals("APPROVED")){
+            Employee employee = employeeRepository.findEmployeeByUsername(leave.getEmpUsername()).orElseThrow(()-> new CustomException("user not found"));
             if (leave.isHalfDay()){
                 if(ChronoUnit.DAYS.between(leave.getStartDate(), leave.getEndDate())==1){
                     employee.setLeaveBalance(employee.getLeaveBalance()- 0.5);

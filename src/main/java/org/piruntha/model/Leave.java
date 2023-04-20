@@ -7,6 +7,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -16,11 +17,12 @@ public class Leave {
     @Id
     private String id;
     private String empUsername;
+    private String empId;
     private LocalDate startDate;
     private LocalDate endDate;
     private boolean halfDay;
     private  String reason;
-    private String status;
+    private Status status;
 
     public void setEmpUsername(String empUsername) {
         this.empUsername = empUsername;

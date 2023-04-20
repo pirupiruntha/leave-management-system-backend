@@ -1,19 +1,22 @@
 package org.piruntha.dto.responses;
 
 import lombok.Data;
+import org.piruntha.model.Gender;
+import org.piruntha.model.JobTitle;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.util.List;
 
 @Data
 public class EmployeeResponse {
-    private int empId;
+    private String empId;
     private String fullName;
-    private Date dob;
-    private String gender;
+    private LocalDate dob;
+    private Gender gender;
     private String email;
     private String telephoneNo;
     private String education;
-    private String jobTitle;
-    private Date startDate;
+    private JobTitle jobTitle;
+    private LocalDate startDate;
     private double salary;
 }

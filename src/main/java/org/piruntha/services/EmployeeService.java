@@ -3,6 +3,7 @@ package org.piruntha.services;
 import org.piruntha.dto.requests.EmployeeRequest;
 import org.piruntha.dto.responses.DeleteResponse;
 import org.piruntha.dto.responses.EmployeeResponse;
+import org.piruntha.exceptions.CustomException;
 import org.piruntha.exceptions.EmailExistsException;
 import org.piruntha.model.Employee;
 import org.piruntha.model.UserRoles;
@@ -10,6 +11,7 @@ import org.piruntha.repository.EmployeeRepository;
 import org.piruntha.repository.LeaveRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -29,6 +31,9 @@ public class EmployeeService {
     @Autowired
     LeaveRepository leaveRepository;
 
+    @Value("${leave.allowanceMax}")
+    private int leaveAllowanceMax;
+
     public Employee addEmployee(EmployeeRequest employeeRequest) throws EmailExistsException {
         Employee employee = new Employee();
         employee.setEmpId(employeeRequest.getEmpId());
@@ -39,15 +44,15 @@ public class EmployeeService {
         employee.setGender(employeeRequest.getGender());
         employee.setEmail(employeeRequest.getEmail());
         if (employeeRepository.existsByEmail(employeeRequest.getEmail())) {
-            throw new EmailExistsException("Email already exists");
+            throw new CustomException("Email already exists", 401);
         }
         employee.setEducation(employeeRequest.getEducation());
         employee.setTelephoneNo(employeeRequest.getTelephoneNo());
         employee.setJobTitle(employeeRequest.getJobTitle());
-        if(employeeRequest.getLeaveAllowance()<=21){
+        if(employeeRequest.getLeaveAllowance()<=leaveAllowanceMax){
             employee.setLeaveAllowance(employeeRequest.getLeaveAllowance());
         } else {
-            throw new RuntimeException("Leave allowance not allow more than 21");
+            throw new CustomException("Leave allowance not allow more than 21");
         }
         employee.setLeaveBalance(employeeRequest.getLeaveAllowance());
         employee.setStartDate(employeeRequest.getStartDate());
@@ -68,7 +73,7 @@ public class EmployeeService {
     }
 
     public Employee editAnEmployee(String username, EmployeeRequest employeeRequest){
-        Employee existingEmployee = employeeRepository.findEmployeeByUsername(username).orElseThrow(()-> new RuntimeException("employee not found"));
+        Employee existingEmployee = employeeRepository.findEmployeeByUsername(username).orElseThrow(()-> new CustomException("employee not found " + username, 404));
         String password = existingEmployee.getPassword();
         BeanUtils.copyProperties(employeeRequest, existingEmployee);
         existingEmployee.setUsername(username);

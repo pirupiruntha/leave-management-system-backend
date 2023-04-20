@@ -1,16 +1,19 @@
 package org.piruntha.dto.responses;
 
 import lombok.Data;
+import org.piruntha.model.Status;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.util.List;
+
 @Data
 public class LeaveResponse {
-    private String username;
+    private String empId;
     private String id;
     private String empUsername;
     private String leaveType;
-    private Date startDate;
-    private Date endDate;
+    private LocalDate startDate;
+    private LocalDate endDate;
     private boolean halfDay;
-    private String status;
+    private Status status;
 }
