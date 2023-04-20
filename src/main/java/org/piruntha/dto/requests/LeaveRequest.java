@@ -6,6 +6,7 @@ import java.time.LocalDate;
 @Data
 public class LeaveRequest {
     private String empUsername;
+    private String empId;
     private LocalDate startDate;
     private LocalDate endDate;
     private boolean halfDay;
