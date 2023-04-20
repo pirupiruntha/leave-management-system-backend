@@ -25,10 +25,6 @@ k
 ;src/main/java/org/piruntha/dto/responses/LoginResponse.java,d\3\d38083d9ae4eb14229d198987ec43c1d2c049995
 l
 <src/main/java/org/piruntha/dto/responses/DeleteResponse.java,7\e\7e0e20baaf67fb5ff72090d60002be124df0332e
-h
-8src/main/java/org/piruntha/dto/requests/AuthRequest.java,6\7\67eeafb4813c52599996980c40a4c03631444ccc
-d
-4src/main/java/org/piruntha/services/AuthService.java,d\f\dfeaf0637d660c03fb45d35dd4e8323d33d15a23
 j
 :src/main/java/org/piruntha/config/UserInfoUserDetails.java,6\9\6931f1b2e020b7e43738ed49c5bb1502d4fb0de8
 m
